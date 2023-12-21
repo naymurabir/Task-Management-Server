@@ -36,6 +36,8 @@ async function run() {
 
         const usersCollection = client.db("visionTaskDB").collection("users")
 
+        const tasksCollection = client.db("visionTaskDB").collection("allTasks")
+
         //JWT related APIs
         app.post('/jwt', async (req, res) => {
             const user = req.body
@@ -73,6 +75,15 @@ async function run() {
                 res.send(result)
             }
         })
+
+
+        //------------------Tasks related APIs-------------------
+        app.post('/allTasks', async (req, res) => {
+            const newTask = req.body
+            const result = await tasksCollection.insertOne(newTask)
+            res.send(result)
+        })
+
 
 
         // Send a ping to confirm a successful connection
