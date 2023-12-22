@@ -93,6 +93,38 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/updateTask/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await tasksCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.put('/updateTask/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateTask = req.body
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: {
+                    title: updateTask.title,
+                    priority: updateTask.priority,
+                    current_date: updateTask.current_date,
+                    deadline: updateTask.deadline,
+                    task_description: updateTask.task_description,
+                }
+            }
+            const result = await tasksCollection.updateOne(filter, updateDoc, options)
+            res.send(result)
+        })
+
+        app.delete('/allTasks/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await tasksCollection.deleteOne(query)
+            res.send(result)
+        })
+
 
 
         // Send a ping to confirm a successful connection
